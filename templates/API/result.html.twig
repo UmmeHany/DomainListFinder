@@ -1,0 +1,70 @@
+
+{% extends 'base.html.twig'%}
+
+{% block title %}Domain Data{% endblock %}
+
+{% block head %}
+	{{ parent() }}
+
+	{% block javascripts %}
+		{{ parent() }}
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				var session_id = document.getElementById("session_id").value;
+
+				if(session_id !=""){
+					window.addEventListener('beforeunload', function (e) {
+					// the absence of a returnValue property on the event will guarantee the browser unload happens
+					delete e['returnValue'];
+					});
+				}
+			 });		
+					
+		</script>
+	{% endblock %}
+
+	<link href="{{ asset('css/result.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+	<div class="header-wrap">
+		<font color="black"><b>Username : </b></font><span>{{username}}</span>
+		<form name="logoutForm" action="{{ path('logout') }}" method="post" style="float: right;"> 
+			<input  type="submit" class="btn btn-default btn-sm"   value="Log Out"/> 
+		</form>
+		<input type="hidden" id="session_id" name="session_id" value={{session_id}}>	   
+	</div>
+
+	<div class="table-wrap">
+		<table class="table table-striped table-bordered"> 
+		    <thead>
+		        <tr>
+		            <td class=" bg-primary thead-wrap"><b>DOMAIN</b> </td>
+		            <td class=" bg-primary thead-wrap"><b>DOMAINCREATEDDATE</b> </td>
+		            <td class=" bg-primary thead-wrap"><b>DOMAINEXPIRATIONDATE </b> </td>
+		            <td class=" bg-primary thead-wrap"><b>DOMAINSTATUS </b> </td>
+		            <td class=" bg-primary thead-wrap"><b>DOMAINOWNERCONTACT </b> </td>
+		        </tr>
+		    </thead>
+		    <tbody>
+
+		    	{%  for item in domain_list %}
+		    		<tr>
+		    			<td>{{item.getDomainName()}}</td>
+		    			<td>{{item.getRegistrationDate()}}</td>
+		    			<td>{{item.getExpirationDate()}}</td>
+		    			<td>{{item.getDomainStatus()}}</td>
+		    			<td>{{item.getRegistrantID()}}</td>
+			    	<tr>
+			    {% endfor %} 
+		    </tbody>
+		</table>
+		    
+	</div>
+
+	<div class="footer-wrap">
+	</div>
+{% endblock %}
